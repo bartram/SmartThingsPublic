@@ -13,8 +13,8 @@
  *  for the specific language governing permissions and limitations under the License.
  *
  */
-
-
+ 
+ 
 preferences {
     input("deviceID", "text", title: "Device ID")
     input("accessToken", "text", title: "Access Token")
@@ -33,17 +33,17 @@ metadata {
 		// TODO: define status and reply messages here
 	}
 
-  tiles {
-    standardTile("Door Control", "device.doorControl", width: 2, height: 2, canChangeIcon: true) {
-      state "unknown", label: ${name}', icon: "st.switches.switch.on"
-      state "open", label: '${name}', icon: "st.switches.switch.on", backgroundColor: "#79b821"
-      state "closed", label: '${name}', icon: "st.switches.switch.off", backgroundColor: "#ffffff"
-    }
+	tiles {
+		// TODO: define your main and details tiles here
+		standardTile("Door Control", "device.doorControl", width: 2, height: 2, canChangeIcon: true) {
+	  		state "open", label: '${name}', action: "switch.open", icon: "st.switches.switch.on", backgroundColor: "#79b821"
+    		state "closed", label: '${name}', action: "switch.closed", icon: "st.switches.switch.off", backgroundColor: "#ffffff"
+		}
 
-    main "doorControl"
-    details "doorControl"
+		main "doorControl"
+		details "doorControl"
 
-  }
+	}
 }
 
 // parse events into attributes
@@ -61,9 +61,9 @@ def open() {
 	// TODO: handle 'open' command
     httpPost(
 		uri: "https://api.particle.io/v1/devices/${deviceID}/setLatch",
-        body: [access_token: accessToken, args: "open"],
+        body: [access_token: accessToken, args: "open"],  
 	) {response -> log.debug (response.data)}
-
+    
 }
 
 def close() {
@@ -71,6 +71,6 @@ def close() {
 	// TODO: handle 'close' command
     httpPost(
 		uri: "https://api.particle.io/v1/devices/${deviceID}/setLatch",
-        body: [access_token: accessToken, args: "close"],
+        body: [access_token: accessToken, args: "close"],  
 	) {response -> log.debug (response.data)}
 }
