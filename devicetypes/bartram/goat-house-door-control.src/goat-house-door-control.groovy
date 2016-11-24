@@ -18,6 +18,8 @@
 preferences {
     input("deviceID", "text", title: "Device ID")
     input("accessToken", "text", title: "Access Token")
+    input("latchOpen", "number", title: "Latch Open", description: "Servo position (in degrees) when latch is open.", defaultValue: 95)
+    input("latchClosed", "number", title: "Latch Closed", description: "Servo position (in degrees) when latch is closed.", defaultValue: 15)
 }
 
 metadata {
@@ -34,15 +36,13 @@ metadata {
 	}
 
 	tiles {
-		standardTile("open", "device.door", inactiveLabel: false, decoration: "flat") {
-			state "default", label:'open', action:"door control.open", icon:"st.locks.lock.unlocked"
+		standardTile("door", "device.door", inactiveLabel: false, decoration: "flat") {
+			state "default", label:'open', icon:"st.locks.lock.unlocked", action:"door control.open", nextState: "opening"
+            state "opening", label:'opening', icon:"st.locks.lock.unlocked"
 		}
-//		standardTile("close", "device.door", inactiveLabel: false, decoration: "flat") {
-//			state "default", label:'close', action:"door control.close", icon:"st.doors.garage.garage-closing"
-//		}
 
-		main "open"
-		details(["open"])
+		main "door"
+		details(["door"])
 	}
 }
 
@@ -58,19 +58,17 @@ def parse(String description) {
 // handle commands
 def open() {
 	log.debug "Executing 'open'"
-	// TODO: handle 'open' command
-    httpPost(
-		uri: "https://api.particle.io/v1/devices/${deviceID}/setLatch",
-        body: [access_token: accessToken, args: "open"],  
+
+	httpPost(
+		uri: "https://api.particle.io/v1/devices/${deviceID}/doorOpen",
+        body: [access_token: accessToken],  
 	) {response -> log.debug (response.data)}
     
+    sendEvent(name: "door", value: "default", isStateChange: true);
+
 }
 
 def close() {
 	log.debug "Executing 'close'"
 	// TODO: handle 'close' command
-    httpPost(
-		uri: "https://api.particle.io/v1/devices/${deviceID}/setLatch",
-        body: [access_token: accessToken, args: "close"],  
-	) {response -> log.debug (response.data)}
 }
