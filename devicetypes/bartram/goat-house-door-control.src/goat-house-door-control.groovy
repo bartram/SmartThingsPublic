@@ -34,15 +34,15 @@ metadata {
 	}
 
 	tiles {
-		// TODO: define your main and details tiles here
-		standardTile("Door Control", "device.doorControl", width: 2, height: 2, canChangeIcon: true) {
-	  		state "open", label: '${name}', action: "switch.open", icon: "st.switches.switch.on", backgroundColor: "#79b821"
-    		state "closed", label: '${name}', action: "switch.closed", icon: "st.switches.switch.off", backgroundColor: "#ffffff"
+		standardTile("open", "device.door", inactiveLabel: false, decoration: "flat") {
+			state "default", label:'open', action:"door control.open", icon:"st.locks.lock.unlocked"
 		}
+//		standardTile("close", "device.door", inactiveLabel: false, decoration: "flat") {
+//			state "default", label:'close', action:"door control.close", icon:"st.doors.garage.garage-closing"
+//		}
 
-		main "doorControl"
-		details "doorControl"
-
+		main "open"
+		details(["open"])
 	}
 }
 
